@@ -1,3 +1,5 @@
+const { email } = require('./nodemail');
+
 // .ENV
 const {
     WEB3_PROVIDER,
@@ -45,10 +47,12 @@ const contractEventListener = (eventName) => {
     // subscribedEvents[eventName] = subscription
     contract.events.Increased()
     .on('data', (evt) => {
-        console.log(`Amount increased to ${evt.returnValues.currentCount} for ${eventName} event from address ${evt.returnValues.incrementor}`)
-        console.log(evt.returnValues.incrementor)
-        console.log(evt.returnValues.currentCount)
-    })
+        const count = evt.returnValues.currentCount;
+        const address = evt.returnValues.incrementor;
+        email(count, address);
+        console.log(address);
+        console.log(count);
+    });
 }
 
 module.exports = {
